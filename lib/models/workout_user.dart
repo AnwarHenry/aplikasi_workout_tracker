@@ -1,11 +1,11 @@
-class Workout {
+class WorkoutUser {
   int? id;
   final String name;
   final String schedule;
   final int duration;
   final int calories;
 
-  Workout({
+  WorkoutUser({
     this.id,
     required this.name,
     required this.schedule,
@@ -23,8 +23,8 @@ class Workout {
     };
   }
 
-  factory Workout.fromMap(Map<String, dynamic> map) {
-    return Workout(
+  factory WorkoutUser.fromMap(Map<String, dynamic> map) {
+    return WorkoutUser(
       id: map['id'],
       name: map['name'],
       schedule: map['schedule'],

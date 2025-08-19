@@ -2,21 +2,29 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:workout_tracker/models/user.dart';
+import 'package:workout_tracker/models/workout_user.dart';
 
 class DbHelper {
   static Future<Database> databaseHelper() async {
     final dbPath = await getDatabasesPath();
     return openDatabase(
       join(dbPath, 'login.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE users(id INTEGER PRIMARY KEY, email TEXT, password TEXT, name TEXT)',
+      onCreate: (db, version) async {
+        // Tabel users
+        await db.execute(
+          'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, password TEXT)',
+        );
+
+        // Tabel train
+        await db.execute(
+          'CREATE TABLE trains(id INTEGER PRIMARY KEY AUTOINCREMENT, schedule TEXT, categories TEXT, stage TEXT)',
         );
       },
       version: 1,
     );
   }
 
+  //----------Users----------
   static Future<void> registerUser(User user) async {
     final db = await databaseHelper();
     await db.insert(
@@ -26,12 +34,12 @@ class DbHelper {
     );
   }
 
-  static Future<User?> loginUser(String email, String password) async {
+  static Future<User?> loginUser(String username, String password) async {
     final db = await databaseHelper();
     final List<Map<String, dynamic>> results = await db.query(
       'users',
-      where: 'email = ? AND password = ?',
-      whereArgs: [email, password],
+      where: 'username = ? AND password = ?',
+      whereArgs: [username, password],
     );
 
     if (results.isNotEmpty) {
@@ -51,7 +59,7 @@ class DbHelper {
     await db.update(
       'users',
       user.toMap(),
-      where: 'id = ?',
+      where: "id = ?",
       whereArgs: [user.id],
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -59,7 +67,39 @@ class DbHelper {
 
   static Future<void> deleteUser(int id) async {
     final db = await databaseHelper();
-    await db.delete('users', where: 'id = ?', whereArgs: [id]);
+    await db.delete('users', where: "id = ?", whereArgs: [id]);
+  }
+
+  //----------Workout User----------
+  static Future<void> registerTrain(WorkoutUser train) async {
+    final db = await databaseHelper();
+    await db.insert(
+      'trains',
+      train.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<List<WorkoutUser>> getAllTrain() async {
+    final db = await databaseHelper();
+    final List<Map<String, dynamic>> results = await db.query('trains');
+    return results.map((e) => WorkoutUser.fromMap(e)).toList();
+  }
+
+  static Future<void> updateTrain(WorkoutUser train) async {
+    final db = await databaseHelper();
+    await db.update(
+      'trains',
+      train.toMap(),
+      where: "id = ?",
+      whereArgs: [train.id],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<void> deleteTrain(int id) async {
+    final db = await databaseHelper();
+    await db.delete('trains', where: "id = ?", whereArgs: [id]);
   }
 }
 

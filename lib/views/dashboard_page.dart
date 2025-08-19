@@ -4,6 +4,7 @@ import 'package:workout_tracker/widgets/progress_card.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
+  static const id = "/dashboard";
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -36,6 +37,45 @@ class _DashboardPageState extends State<DashboardPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(height: 12),
+              const Column(
+                children: [
+                  Text(
+                    "Progress Training",
+                    style: TextStyle(
+                      // fontFamily: "Poppins",
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              const SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Progresscard(
+                      title: "Chest Workout",
+                      subtitle: "15 min remaining",
+                    ),
+                    Progresscard(
+                      title: "Legs Workout",
+                      subtitle: "23 min remaining",
+                    ),
+                    Progresscard(
+                      title: "Abs Workout",
+                      subtitle: "30 min remaining",
+                    ),
+                    Progresscard(
+                      title: "Both Side Plank",
+                      subtitle: "30 min remaining",
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
               Container(
                 width: double.infinity,
                 height: 176,
@@ -111,44 +151,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 26),
-              const Column(
-                children: [
-                  Text(
-                    "Progress",
-                    style: TextStyle(
-                      // fontFamily: "Poppins",
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Progresscard(
-                      title: "Chest Workout",
-                      subtitle: "15 min remaining",
-                    ),
-                    Progresscard(
-                      title: "Legs Workout",
-                      subtitle: "23 min remaining",
-                    ),
-                    Progresscard(
-                      title: "Abs Workout",
-                      subtitle: "30 min remaining",
-                    ),
-                    Progresscard(
-                      title: "Both Side Plank",
-                      subtitle: "30 min remaining",
                     ),
                   ],
                 ),

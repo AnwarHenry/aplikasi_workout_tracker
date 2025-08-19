@@ -3,6 +3,7 @@ import 'package:workout_tracker/views/dashboard_page.dart';
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
+  static const id = "/BottomNavbar";
 
   @override
   State<BottomNavbar> createState() => _BottomNavBarState();

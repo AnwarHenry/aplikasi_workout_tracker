@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class SplashScreen1 extends StatefulWidget {
-  const SplashScreen1({super.key});
-
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+  static const id = "/splash_screen";
   @override
-  State<SplashScreen1> createState() => _SplashScreen1State();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreen1State extends State<SplashScreen1> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   // void initState() {
   //   super.initState();
