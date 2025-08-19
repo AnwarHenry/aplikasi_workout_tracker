@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:workout_tracker/views/dashboard_page.dart';
-import 'package:workout_tracker/views/login_screen.dart';
-import 'package:workout_tracker/views/splash_screen.dart';
+import 'package:workout_tracker/views/bottom_navbar.dart';
 
 void main() {
   initializeDateFormatting("id_ID");
@@ -17,19 +15,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Workout Tracker App',
+      color: Colors.black,
       theme: ThemeData(
         datePickerTheme: DatePickerThemeData(
           backgroundColor: Colors.blue.shade100,
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
       ),
-      initialRoute: SplashScreen.id,
-      routes: {
-        "/login": (context) => const LoginScreen(),
-        SplashScreen.id: (context) => const SplashScreen(),
-        // DashboardPage.id: (context) => const DashboardPage(),
-      },
-      // home: const SplashScreen(),
+
+      debugShowCheckedModeBanner: false,
+      // initialRoute: SplashScreen.id,
+      // routes: {
+      //   "/login": (context) => const LoginScreen(),
+      //   SplashScreen.id: (context) => const SplashScreen(),
+      //   // DashboardPage.id: (context) => const DashboardPage(),
+      // },
+      home: const BottomNavbar(),
     );
   }
 }

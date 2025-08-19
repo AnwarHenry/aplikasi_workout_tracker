@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:workout_tracker/extension/navigation.dart';
 import 'package:workout_tracker/preference/shared_preference.dart';
-import 'package:workout_tracker/views/login_screen.dart';
+import 'package:workout_tracker/views/login_page.dart';
 
 class LogOutButton extends StatelessWidget {
   const LogOutButton({super.key});
@@ -11,7 +11,7 @@ class LogOutButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         PreferenceHandler.removeLogin();
-        context.pushReplacementNamed(LoginScreen.id);
+        context.pushReplacementNamed(LoginPage.id);
       },
       child: const Text("Keluar"),
     );
