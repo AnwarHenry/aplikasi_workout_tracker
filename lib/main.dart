@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:workout_tracker/views/bottom_navbar.dart';
+import 'package:workout_tracker/views/Beranda/bottom_navbar.dart';
+import 'package:workout_tracker/views/screen_before_login.dart';
+import 'package:workout_tracker/views/splash_screen.dart';
 
 void main() {
   // initializeDateFormatting("id_ID");
@@ -23,13 +25,13 @@ class MyApp extends StatelessWidget {
       ),
 
       debugShowCheckedModeBanner: false,
-      // initialRoute: SplashScreen.id,
-      // routes: {
-      //   "/login": (context) => const Screen1(),
-      //   SplashScreen.id: (context) => const SplashScreen(),
-      //   BottomNavbar.id: (context) => const BottomNavbar(),
-      // },
-      home: const BottomNavbar(),
+      initialRoute: SplashScreen.id,
+      routes: {
+        "/login": (context) => const Screen1(),
+        SplashScreen.id: (context) => const SplashScreen(),
+        BottomNavbar.id: (context) => const BottomNavbar(),
+      },
+      // home: const BottomNavbar(),
     );
   }
 }

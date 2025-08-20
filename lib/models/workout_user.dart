@@ -1,35 +1,31 @@
 class WorkoutUser {
   int? id;
-  final String name;
   final String schedule;
-  final int duration;
-  final int calories;
+  final String categories;
+  final String stage;
 
   WorkoutUser({
     this.id,
-    required this.name,
     required this.schedule,
-    required this.duration,
-    required this.calories,
+    required this.categories,
+    required this.stage,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
       'schedule': schedule,
-      'duration': duration,
-      'calories': calories,
+      'categories': categories,
+      'stage': stage,
     };
   }
 
   factory WorkoutUser.fromMap(Map<String, dynamic> map) {
     return WorkoutUser(
       id: map['id'],
-      name: map['name'],
       schedule: map['schedule'],
-      duration: map['duration'],
-      calories: map['calories'],
+      categories: map['categories'],
+      stage: map['stage'],
     );
   }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:workout_tracker/views/dashboard_page.dart';
+import 'package:workout_tracker/views/Beranda/dashboard_page.dart';
+import 'package:workout_tracker/views/report/workout_form.dart';
+import 'package:workout_tracker/views/report/workout_report.dart';
+import 'package:workout_tracker/views/settings.dart';
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
@@ -14,12 +17,9 @@ class _BottomNavBarState extends State<BottomNavbar> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     DashboardPage(),
-    Center(
-        child: Text(
-            "Report Page")), // Diubah dari "Halaman 2" menjadi lebih deskriptif
-    Center(
-        child: Text(
-            "Profile Page")), // Diubah dari "Halaman 2" menjadi lebih deskriptif
+    WorkoutForm(),
+    WorkoutReport(),
+    SettingsPage(),
   ];
 
   @override
@@ -34,10 +34,10 @@ class _BottomNavBarState extends State<BottomNavbar> {
     return Container(
       height: 80,
       decoration: const BoxDecoration(
-        color: Colors.blue,
+        color: Color.fromARGB(255, 44, 168, 240),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+          topLeft: Radius.circular(5),
+          topRight: Radius.circular(5),
         ),
       ),
       child: Row(
@@ -46,14 +46,23 @@ class _BottomNavBarState extends State<BottomNavbar> {
         children: [
           _buildNavItem(Icons.explore, "Dashboard", 0),
           _buildNavItem(
-              Icons.bar_chart_rounded, "Report", 1), // Index disesuaikan
-          _buildNavItem(Icons.person, "Profile", 2), // Index disesuaikan
+            Icons.explore,
+            "Workout",
+            1,
+            image: 'assets/images/form-barble.png',
+            assetimage: true,
+          ),
+          _buildNavItem(Icons.bar_chart_rounded, "Report", 2),
+          // Index disesuaikan
+          _buildNavItem(
+              Icons.person_rounded, "Profile", 3), // Index disesuaikan
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
+  Widget _buildNavItem(IconData icon, String label, int index,
+      {bool assetimage = false, String? image}) {
     bool isSelected = _currentIndex == index;
     return GestureDetector(
       onTap: () => setState(() => _currentIndex = index),
@@ -65,13 +74,17 @@ class _BottomNavBarState extends State<BottomNavbar> {
             height: 50,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isSelected ? Colors.green : Colors.transparent,
+              color: isSelected
+                  ? const Color.fromARGB(255, 148, 34, 255)
+                  : Colors.transparent,
             ),
-            child: Icon(
-              icon,
-              color: isSelected ? Colors.white : Colors.grey[300],
-              size: 24,
-            ),
+            child: assetimage
+                ? Image.asset(image!)
+                : Icon(
+                    icon,
+                    color: isSelected ? Colors.white : Colors.grey[300],
+                    size: 24,
+                  ),
           ),
           const SizedBox(height: 4),
           Text(

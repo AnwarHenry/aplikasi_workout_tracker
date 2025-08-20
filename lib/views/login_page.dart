@@ -1,6 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workout_tracker/extension/navigation.dart';
+import 'package:workout_tracker/preference/shared_preference.dart';
+import 'package:workout_tracker/sqflite/db_helper.dart';
+import 'package:workout_tracker/views/Beranda/bottom_navbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,25 +21,28 @@ class _LoginPageState extends State<LoginPage> {
   bool isVisibility = false;
   // bool _obsecurePassword = true;
 
-  // login() async {
-  //   final username = usernameController.text.trim();
-  //   final password = passwordController.text.trim();
-  //   if (username.isEmpty || password.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text("Username and Password cannot be empty")),
-  //     );
-  //     return;
-  //   }
-  //   final userData = await DbHelper.loginUser(username, password);
-  //   if (userData != null) {
-  //     PreferencedHandler.saveLogin();
-  //     context.pushReplacementNamed(newRouteName);
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text("Incorrect username or password")),
-  //     );
-  //   }
-  // }
+  login() async {
+    final username = usernameController.text.trim();
+    final password = passwordController.text.trim();
+    if (username.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Username and Password cannot be empty")),
+      );
+      return;
+    }
+    final userData = await DbHelper.loginUser(username, password);
+    if (userData != null) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('username', userData.username);
+      // await prefs.setString('email', userData.email);
+      await PreferenceHandler.saveLogin();
+      context.pushReplacementNamed(BottomNavbar.id);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Incorrect username or password")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       height: double.infinity,
       width: double.infinity,
-      color: Colors.cyan,
+      color: Colors.white,
     );
   }
 
@@ -106,16 +114,16 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/images/workout.png',
-                    height: 225, width: 225),
+                Image.asset("assets/images/workout.png",
+                    height: 300, width: 300),
                 const Text(
-                  "Make Your Future Health",
+                  "Make Your Health",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     // fontFamily: "Poppins",
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    // color: AppColor.oranye,
+                    color: Colors.black,
                   ),
                 ),
                 const Text(
@@ -125,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                     // fontFamily: "Poppins",
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    // color: AppColor.birutua,
+                    color: Colors.white,
                   ),
                 ),
                 height(20),
@@ -147,13 +155,13 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 114, 7, 255),
+                      backgroundColor: Colors.orange,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     onPressed: () {
-                      // context.pushNamed(routeName);
+                      login();
                     },
                     child: const Text(
                       "Login",
@@ -173,25 +181,12 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       onPressed: () {},
                       child: const Text(
-                        "Don't have an account ? \nSign Up",
-                        style: TextStyle(
-                          // fontFamily: "Poppins",
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 243, 65, 33),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
                         "Forgot Password?",
                         style: TextStyle(
                           // fontFamily: "Poppins",
-                          fontSize: 12,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 243, 65, 33),
+                          color: Colors.red,
                         ),
                       ),
                     ),

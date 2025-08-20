@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:workout_tracker/extension/navigation.dart';
+import 'package:workout_tracker/views/login_page.dart';
+import 'package:workout_tracker/views/register_page.dart';
 
 class Screen1 extends StatefulWidget {
   const Screen1({super.key});
@@ -38,13 +41,13 @@ class _Screen1State extends State<Screen1> {
                     height: 225, width: 225),
                 // SizedBox(height: 0),
                 const Text(
-                  "Make Your Future Health",
+                  "Make Your Health",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     // fontFamily: "Poppins",
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    // color: AppColor.oranye,
+                    color: Color.fromARGB(255, 1, 20, 105),
                   ),
                 ),
                 const Text(
@@ -54,7 +57,7 @@ class _Screen1State extends State<Screen1> {
                     // fontFamily: "Poppins",
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 107, 33, 243),
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -62,13 +65,13 @@ class _Screen1State extends State<Screen1> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 114, 7, 255),
+                      backgroundColor: const Color.fromARGB(255, 12, 112, 228),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     onPressed: () {
-                      // context.pushNamed(routeName);
+                      context.push(const Register1());
                     },
                     child: const Text(
                       "Create Account",
@@ -87,13 +90,13 @@ class _Screen1State extends State<Screen1> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 114, 7, 255),
+                      backgroundColor: const Color.fromARGB(255, 12, 112, 228),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     onPressed: () {
-                      // context.pushNamed(routeName);
+                      context.push(const LoginPage());
                     },
                     child: const Text(
                       "Sign In",

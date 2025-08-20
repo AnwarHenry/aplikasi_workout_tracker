@@ -10,7 +10,7 @@ class Progresscard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 134,
-      height: 142,
+      height: 134,
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -18,8 +18,8 @@ class Progresscard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: const [
           BoxShadow(
-            // color: AppColor.secondary,
-            blurRadius: 6,
+            color: Colors.black,
+            blurRadius: 5,
             offset: Offset(2, 2),
           ),
         ],

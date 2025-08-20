@@ -14,14 +14,14 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.cyan,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.cyan,
+        backgroundColor: const Color.fromARGB(255, 44, 168, 240),
         title: Image.asset(
           "assets/images/workout.png",
           // fit: BoxFit.cover,
-          height: 70,
-          width: 70,
+          height: 75,
+          width: 75,
         ),
         actions: [
           IconButton(
@@ -32,7 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -51,7 +51,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -83,7 +83,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   gradient: const LinearGradient(
-                    colors: [Color.fromARGB(255, 231, 99, 11), Colors.grey],
+                    colors: [
+                      Color(0xFFFF6B35), // Orange
+                      Color(0xFFFF8A65), // Light Orange
+                      Color(0xFFFF5252), // Red-Orange
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -100,7 +104,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Start Strong and\nSet Your Fitness\nGoals",
+                            "Start Set\nYour Fitness\nGoals",
                             style: TextStyle(
                               color: Colors.white,
                               // fontFamily: "Poppins",

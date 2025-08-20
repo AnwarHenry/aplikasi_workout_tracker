@@ -15,9 +15,9 @@ class DbHelper {
           'CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, password TEXT)',
         );
 
-        // Tabel train
+        // Tabel workout
         await db.execute(
-          'CREATE TABLE trains(id INTEGER PRIMARY KEY AUTOINCREMENT, schedule TEXT, categories TEXT, stage TEXT)',
+          'CREATE TABLE workouts(id INTEGER PRIMARY KEY AUTOINCREMENT, schedule TEXT, categories TEXT, stage TEXT)',
         );
       },
       version: 1,
@@ -71,35 +71,35 @@ class DbHelper {
   }
 
   //----------Workout User----------
-  static Future<void> registerTrain(WorkoutUser train) async {
+  static Future<void> registerworkout(WorkoutUser workout) async {
     final db = await databaseHelper();
     await db.insert(
-      'trains',
-      train.toMap(),
+      'workouts',
+      workout.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  static Future<List<WorkoutUser>> getAllTrain() async {
+  static Future<List<WorkoutUser>> getAllworkout() async {
     final db = await databaseHelper();
-    final List<Map<String, dynamic>> results = await db.query('trains');
+    final List<Map<String, dynamic>> results = await db.query('workouts');
     return results.map((e) => WorkoutUser.fromMap(e)).toList();
   }
 
-  static Future<void> updateTrain(WorkoutUser train) async {
+  static Future<void> updateworkout(WorkoutUser workout) async {
     final db = await databaseHelper();
     await db.update(
-      'trains',
-      train.toMap(),
+      'workouts',
+      workout.toMap(),
       where: "id = ?",
-      whereArgs: [train.id],
+      whereArgs: [workout.id],
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  static Future<void> deleteTrain(int id) async {
+  static Future<void> deleteworkout(int id) async {
     final db = await databaseHelper();
-    await db.delete('trains', where: "id = ?", whereArgs: [id]);
+    await db.delete('workouts', where: "id = ?", whereArgs: [id]);
   }
 }
 
