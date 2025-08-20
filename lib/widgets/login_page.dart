@@ -115,12 +115,11 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset("assets/images/workout.png",
-                    height: 300, width: 300),
+                    height: 225, width: 225),
                 const Text(
                   "Make Your Health",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    // fontFamily: "Poppins",
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -130,7 +129,6 @@ class _LoginPageState extends State<LoginPage> {
                   "Better",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    // fontFamily: "Poppins",
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -155,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: const Color.fromARGB(255, 245, 102, 7),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -183,7 +181,6 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text(
                         "Forgot Password?",
                         style: TextStyle(
-                          // fontFamily: "Poppins",
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.red,

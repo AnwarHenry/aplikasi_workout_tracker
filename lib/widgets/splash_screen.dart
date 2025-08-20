@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:workout_tracker/extension/navigation.dart';
 import 'package:workout_tracker/preference/shared_preference.dart';
 import 'package:workout_tracker/views/Beranda/bottom_navbar.dart';
-import 'package:workout_tracker/views/screen_before_login.dart';
+import 'package:workout_tracker/widgets/screen_before_login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

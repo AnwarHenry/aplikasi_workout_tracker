@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:workout_tracker/views/Beranda/bottom_navbar.dart';
-import 'package:workout_tracker/views/screen_before_login.dart';
-import 'package:workout_tracker/views/splash_screen.dart';
+import 'package:workout_tracker/views/settings.dart';
+import 'package:workout_tracker/widgets/splash_screen.dart';
 
 void main() {
   // initializeDateFormatting("id_ID");
@@ -23,15 +22,14 @@ class MyApp extends StatelessWidget {
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
       ),
-
       debugShowCheckedModeBanner: false,
       initialRoute: SplashScreen.id,
       routes: {
-        "/login": (context) => const Screen1(),
-        SplashScreen.id: (context) => const SplashScreen(),
-        BottomNavbar.id: (context) => const BottomNavbar(),
+        // "/login": (context) => const Screen1(),
+        // SplashScreen.id: (context) => const SplashScreen(),
+        // BottomNavbar.id: (context) => const BottomNavbar(),
       },
-      // home: const BottomNavbar(),
+      home: SettingsPage(),
     );
   }
 }

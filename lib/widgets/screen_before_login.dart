@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:workout_tracker/extension/navigation.dart';
-import 'package:workout_tracker/views/login_page.dart';
-import 'package:workout_tracker/views/register_page.dart';
+import 'package:workout_tracker/widgets/login_page.dart';
+import 'package:workout_tracker/widgets/register_page.dart';
 
 class Screen1 extends StatefulWidget {
   const Screen1({super.key});
@@ -20,7 +20,12 @@ class _Screen1State extends State<Screen1> {
     return Container(
       height: double.infinity,
       width: double.infinity,
-      color: Colors.cyan,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/background3.png"),
+          fit: BoxFit.cover, // Agar gambar menutupi seluruh background
+        ),
+      ),
     );
   }
 
@@ -47,7 +52,8 @@ class _Screen1State extends State<Screen1> {
                     // fontFamily: "Poppins",
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 1, 20, 105),
+                    color: Colors.white,
+                    // color: Color.fromARGB(255, 1, 20, 105),
                   ),
                 ),
                 const Text(
@@ -65,7 +71,8 @@ class _Screen1State extends State<Screen1> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 12, 112, 228),
+                      backgroundColor: const Color.fromARGB(255, 245, 102, 7),
+                      // backgroundColor: const Color.fromARGB(255, 12, 112, 228),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -90,7 +97,7 @@ class _Screen1State extends State<Screen1> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 12, 112, 228),
+                      backgroundColor: const Color.fromARGB(255, 245, 102, 7),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -112,18 +119,18 @@ class _Screen1State extends State<Screen1> {
                 const SizedBox(height: 10),
                 const Row(
                   children: <Widget>[
-                    Expanded(child: Divider(color: Colors.black, thickness: 1)),
+                    Expanded(child: Divider(color: Colors.grey, thickness: 1)),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         'Or Sign In With',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Colors.grey,
                         ),
                       ),
                     ),
-                    Expanded(child: Divider(color: Colors.black, thickness: 1)),
+                    Expanded(child: Divider(color: Colors.grey, thickness: 1)),
                   ],
                 ),
 

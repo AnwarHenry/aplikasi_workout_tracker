@@ -47,7 +47,7 @@ class _BottomNavBarState extends State<BottomNavbar> {
           _buildNavItem(Icons.explore, "Dashboard", 0),
           _buildNavItem(
             Icons.explore,
-            "Workout",
+            "Form Workout",
             1,
             image: 'assets/images/form-barble.png',
             assetimage: true,
@@ -55,7 +55,7 @@ class _BottomNavBarState extends State<BottomNavbar> {
           _buildNavItem(Icons.bar_chart_rounded, "Report", 2),
           // Index disesuaikan
           _buildNavItem(
-              Icons.person_rounded, "Profile", 3), // Index disesuaikan
+              Icons.settings_applications, "Settings", 3), // Index disesuaikan
         ],
       ),
     );
