@@ -3,8 +3,21 @@ import 'package:workout_tracker/extension/navigation.dart';
 import 'package:workout_tracker/preference/shared_preference.dart';
 import 'package:workout_tracker/widgets/screen_before_login.dart';
 
+/// note :
+/// Halaman pengaturan (SettingsPage)
+/// Menyediakan berbagai opsi konfigurasi aplikasi seperti:
+/// - Notifikasi
+/// - Tema
+/// - Bahasa
+/// - Backup
+/// Serta tombol untuk LOG OUT.
+/// ListView.builder → membuat daftar pengaturan secara dinamis.
+// ElevatedButton + ListTile → setiap setting tampil dengan ikon bulat + judul + panah.
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
+
+  // Route ID → supaya bisa dipanggil dengan navigator menggunakan nama
   static const id = "/settings";
 
   @override
@@ -12,6 +25,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  /// Data list untuk menampilkan item settings.
+  /// Setiap item berisi `title` (judul) dan `icons` (ikon).
   final List<Map<String, dynamic>> settings = [
     {"title": "Locations", "icons": Icons.location_on_sharp},
     {"title": "Notifications", "icons": Icons.notifications},
@@ -23,42 +38,49 @@ class _SettingsPageState extends State<SettingsPage> {
     {"title": "Language", "icons": Icons.language_sharp},
     {"title": "Backup & Restore", "icons": Icons.restore},
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.white, // warna dasar halaman
       body: SingleChildScrollView(
+        // Agar halaman bisa discroll jika item terlalu banyak
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Judul halaman
+              SizedBox(height: 25),
               Text(
                 "Settings",
-                style: TextStyle(
-                  // fontFamily: "Poppins",
-                  fontSize: 30,
+                style: const TextStyle(
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 20),
+
+              // Membuat daftar pengaturan dari list `settings`
               ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: settings.length,
                 itemBuilder: (BuildContext context, int index) {
                   final dataSettings = settings[index];
                   return ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 10),
                       backgroundColor: Colors.white,
+                      elevation: 0, // biar rata tanpa bayangan
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    // TODO: Tambahkan aksi sesuai kebutuhan (misalnya buka halaman baru)
                     onPressed: () {},
                     child: ListTile(
+                      // Ikon di dalam lingkaran biru
                       leading: CircleAvatar(
                         backgroundColor: Colors.blue,
                         child: Center(
@@ -69,35 +91,42 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                       ),
+                      // Teks judul setting
                       title: Text(
                         dataSettings["title"],
-                        style: TextStyle(
+                        style: const TextStyle(
                           // fontFamily: "Montserrat",
                           fontSize: 21,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios),
+                      // Ikon panah → menandakan bisa masuk ke detail
+                      trailing: const Icon(Icons.arrow_forward_ios),
                     ),
                   );
                 },
               ),
-              SizedBox(height: 10),
+
+              const SizedBox(height: 10),
+
+              // Tombol LOG OUT
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Color.fromARGB(255, 3, 75, 134),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   onPressed: () {
+                    // Hapus status login di SharedPreferences
                     PreferenceHandler.removeLogin();
-                    context.pushReplacement(Screen1());
+                    // Arahkan user kembali ke halaman sebelum login
+                    context.pushReplacement(const Screen1());
                   },
-                  child: Text(
+                  child: const Text(
                     "LOG OUT",
                     style: TextStyle(
                       // fontFamily: "Poppins",

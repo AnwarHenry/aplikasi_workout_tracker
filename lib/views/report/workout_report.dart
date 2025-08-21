@@ -3,37 +3,74 @@ import 'package:workout_tracker/models/workout_user.dart';
 import 'package:workout_tracker/sqflite/db_helper.dart';
 import 'package:workout_tracker/views/report/workout_card.dart';
 
+/// Halaman WorkoutReport
+/// - Menampilkan daftar workout dari database
+/// - Bisa Edit & Delete workout
+/// - Delete akan menampilkan konfirmasi popup
+
 class WorkoutReport extends StatefulWidget {
   const WorkoutReport({super.key});
-  static const id = "/dataWorkout";
+  static const id = "/work_report"; // route id
 
   @override
   State<WorkoutReport> createState() => _DataWorkoutReport();
 }
 
 class _DataWorkoutReport extends State<WorkoutReport> {
+  // List data workout dari SQLite
   List<WorkoutUser> workout = [];
-  @override
-  void initState() {
-    super.initState();
-    getWorkout();
-  }
 
+  // Controller untuk input text saat Edit workout
   final TextEditingController scheduleController = TextEditingController();
   final TextEditingController categoriesController = TextEditingController();
   final TextEditingController stageController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    getWorkout(); // ambil data workout saat halaman pertama kali dibuka
+  }
+
+  /// Fungsi untuk ambil semua data workout dari SQLite
   Future<void> getWorkout() async {
-    final dataWorkout = await DbHelper.getAllworkout();
-    print(dataWorkout);
+    final workoutreport = await DbHelper.getAllworkout();
     setState(() {
-      workout = dataWorkout;
+      workout = workoutreport;
     });
+  }
+
+  /// Fungsi untuk menampilkan dialog konfirmasi hapus
+  Future<void> confirmDelete(BuildContext context, int workoutId) async {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Konfirmasi Hapus"),
+        content: const Text("Apakah Anda yakin ingin menghapus data ini?"),
+        actions: [
+          // Tombol batal
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Batal"),
+          ),
+          // Tombol hapus
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () async {
+              await DbHelper.deleteworkout(workoutId); // hapus data dari DB
+              getWorkout(); // refresh list
+              Navigator.pop(context); // tutup popup
+            },
+            child: const Text("Hapus"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // AppBar dengan logo workout
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 44, 168, 240),
         title: Image.asset(
@@ -43,30 +80,32 @@ class _DataWorkoutReport extends State<WorkoutReport> {
           fit: BoxFit.cover,
         ),
       ),
+      // Body: background putih + layer isi
       body: Stack(children: [buildBackground(), buildLayer()]),
     );
   }
 
+  /// Layer utama berisi daftar workout
   SafeArea buildLayer() {
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding:
-              const EdgeInsetsGeometry.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Program",
+                  "List Program",
                   style: TextStyle(
-                    // fontFamily: "Poppins",
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
                 height(20),
+
+                // List Workout
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -75,6 +114,8 @@ class _DataWorkoutReport extends State<WorkoutReport> {
                     final dataworkout = workout[index];
                     return WorkoutCard(
                       data: dataworkout,
+
+                      /// Aksi Edit workout
                       onEdit: () {
                         showDialog(
                           context: context,
@@ -131,66 +172,12 @@ class _DataWorkoutReport extends State<WorkoutReport> {
                           ),
                         );
                       },
+
+                      /// Aksi Delete workout → tampilkan konfirmasi popup
                       onDelete: () {
-                        DbHelper.deleteworkout(dataworkout.id!);
-                        getWorkout();
+                        confirmDelete(context, dataworkout.id!);
                       },
                     );
-                    // Card(
-                    //   elevation: 4,
-                    //   shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadiusGeometry.circular(20),
-                    //   ),
-                    //   margin: EdgeInsets.only(bottom: 20),
-                    //   child: Container(
-                    //     height: 120,
-                    //     width: double.infinity,
-                    //     // margin: EdgeInsets.only(bottom: 12),
-                    //     padding: EdgeInsets.all(16),
-                    //     decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(20),
-                    //       gradient: LinearGradient(
-                    //         begin: Alignment.topLeft,
-                    //         end: Alignment.bottomRight,
-                    //         colors: [AppColor.primary, AppColor.secondary],
-                    //       ),
-                    //     ),
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-                    //       children: [
-                    //         Text(
-                    //           dataworkout.schedule,
-                    //           style: TextStyle(
-                    //             fontFamily: "Montserrat",
-                    //             fontSize: 16,
-                    //             color: Colors.white,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //         height(8),
-                    //         Text(
-                    //           dataworkout.categories,
-                    //           style: TextStyle(
-                    //             fontFamily: "Montserrat",
-                    //             fontSize: 14,
-                    //             color: Colors.white,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //         height(8),
-                    //         Text(
-                    //           dataworkout.stage,
-                    //           style: TextStyle(
-                    //             fontFamily: "Montserrat",
-                    //             fontSize: 14,
-                    //             color: Colors.white,
-                    //             fontWeight: FontWeight.bold,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // );
                   },
                 ),
               ],
@@ -201,25 +188,7 @@ class _DataWorkoutReport extends State<WorkoutReport> {
     );
   }
 
-  // Container buildContainer() {
-  //   return Container(
-  //     height: 120,
-  //     width: double.infinity,
-  //     margin: EdgeInsets.only(bottom: 12),
-  //     padding: EdgeInsets.all(12),
-  //     decoration: BoxDecoration(
-  //       gradient: LinearGradient(
-  //         colors: [AppColor.primary, AppColor.secondary],
-  //       ),
-  //       borderRadius: BorderRadius.circular(8),
-  //     ),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [Text(data)],
-  //     ),
-  //   );
-  // }
-
+  /// Background putih
   Container buildBackground() {
     return Container(
       height: double.infinity,
@@ -228,6 +197,6 @@ class _DataWorkoutReport extends State<WorkoutReport> {
     );
   }
 
-  SizedBox height(double height) => SizedBox(height: height);
-  SizedBox width(double width) => SizedBox(width: width);
+  SizedBox height(double h) => SizedBox(height: h);
+  SizedBox width(double w) => SizedBox(width: w);
 }

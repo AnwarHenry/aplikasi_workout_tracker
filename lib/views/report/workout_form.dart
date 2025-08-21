@@ -10,208 +10,217 @@ class WorkoutForm extends StatefulWidget {
 }
 
 class _WorkoutFormState extends State<WorkoutForm> {
+  // Controller untuk schedule
   final TextEditingController scheduleController = TextEditingController();
-  final TextEditingController categoriesController = TextEditingController();
-  final TextEditingController stageController = TextEditingController();
-  bool isLoading = false;
+
+  // State untuk categories dan stage
+  String? selectedCategory;
+  String? selectedStage;
+
+  // List pilihan Categories
+  final List<String> categoriesList = [
+    "Cardio",
+    "Strength Training",
+    "Yoga",
+    "HIIT",
+    "Pilates",
+    "CrossFit",
+    "Cycling",
+    "Running",
+  ];
+
+  // List pilihan Stage
+  final List<String> stageList = [
+    "Beginner",
+    "Intermediate",
+    "Professional",
+  ];
+
+  // Checkbox
   bool isChecked = false;
+  bool isLoading = false;
+
+  /// Fungsi pilih tanggal untuk schedule
+  Future<void> pickScheduleDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        scheduleController.text =
+            "${picked.day}/${picked.month}/${picked.year}";
+      });
+    }
+  }
+
+  /// Fungsi simpan data
+  void registerworkout() async {
+    setState(() => isLoading = true);
+
+    final schedule = scheduleController.text;
+    final categories = selectedCategory ?? "";
+    final stage = selectedStage ?? "";
+
+    if (schedule.isEmpty || categories.isEmpty || stage.isEmpty || !isChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("All fields must be filled")),
+      );
+      setState(() => isLoading = false);
+      return;
+    }
+
+    final train = WorkoutUser(
+      schedule: schedule,
+      categories: categories,
+      stage: stage,
+    );
+
+    await DbHelper.registerworkout(train);
+
+    Future.delayed(const Duration(seconds: 2)).then((value) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Your Data is Saved!")),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 44, 168, 240),
-        title: Image.asset(
-          "assets/images/workout.png",
-          fit: BoxFit.cover,
-          height: 75,
-          width: 75,
-        ),
+        title: Image.asset("assets/images/workout.png",
+            fit: BoxFit.cover, height: 75, width: 75),
       ),
       body: Stack(children: [buildBackground(), buildLayer()]),
     );
   }
 
-  void registerworkout() async {
-    isLoading = true;
-    setState(() {});
-    final schedule = scheduleController.text;
-    final categories = categoriesController.text;
-    final stage = stageController.text;
-    if (schedule.isEmpty || categories.isEmpty || stage.isEmpty || !isChecked) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "All field must be filled and checkbox must be checked",
-          ),
-        ),
-      );
-      isLoading = false;
-
-      return;
-    }
-    final train = WorkoutUser(
-      schedule: schedule,
-      categories: categories,
-      stage: stage,
-    );
-    await DbHelper.registerworkout(train);
-    Future.delayed(const Duration(seconds: 2)).then((value) {
-      isLoading = false;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Never Give Up")));
-    });
-    setState(() {});
-    isLoading = false;
-  }
-
-  TextField buildTextField({
-    String? hintText,
-    String? labelText,
-    TextEditingController? controller,
-  }) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.black),
-        labelText: labelText,
-        labelStyle: const TextStyle(color: Colors.black),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-        ),
-      ),
-    );
-  }
-
-  SizedBox height(double height) => SizedBox(height: height);
-  SizedBox width(double width) => SizedBox(width: width);
-
   Container buildBackground() {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      color: Colors.white,
-    );
+    return Container(color: Colors.white);
   }
 
   SafeArea buildLayer() {
     return SafeArea(
       child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          children: [
+            const Text(
+              "Set Your Training",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Schedule dengan datepicker
+            TextField(
+              controller: scheduleController,
+              readOnly: true,
+              onTap: pickScheduleDate,
+              decoration: InputDecoration(
+                labelText: "Schedule",
+                hintText: "Pick a date",
+                suffixIcon: const Icon(Icons.calendar_today),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 15),
+
+            // Dropdown untuk Categories
+            DropdownButtonFormField<String>(
+              initialValue: selectedCategory,
+              items: categoriesList
+                  .map((cat) => DropdownMenuItem(value: cat, child: Text(cat)))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedCategory = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: "Categories",
+                hintText: "Select workout category",
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 15),
+
+            // Dropdown untuk Stage
+            DropdownButtonFormField<String>(
+              initialValue: selectedStage,
+              items: stageList
+                  .map((st) => DropdownMenuItem(value: st, child: Text(st)))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedStage = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: "Stage",
+                hintText: "Select your stage",
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Checkbox
+            Row(
               children: [
-                const Text(
-                  textAlign: TextAlign.center,
-                  "Set Your Training Program",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                Checkbox(
+                  value: isChecked,
+                  onChanged: (v) => setState(() => isChecked = v ?? false),
                 ),
-                height(30),
-                buildTextField(
-                  controller: scheduleController,
-                  labelText: "Schedule",
-                  hintText: "Please set your schedule",
-                ),
-                height(10),
-                buildTextField(
-                  controller: categoriesController,
-                  labelText: "Categories",
-                  hintText: "Select the category you want",
-                ),
-                height(10),
-                buildTextField(
-                  controller: stageController,
-                  labelText: "Stage",
-                  hintText: "Select the stage you want",
-                ),
-                height(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      value: isChecked,
-                      activeColor: Colors.blue,
-                      onChanged: (value) {
-                        setState(() {
-                          isChecked = value ?? false;
-                        });
-                      },
-                    ),
-                    const SizedBox(width: 15),
-                    Text(
-                      isChecked ? "Keep Your Spirit" : "Are You Sure?",
-                      style: const TextStyle(
-                        // fontFamily: "Montserrat",
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-                height(15),
-                SizedBox(
-                  height: 56,
-                  width: double.infinity,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFFFF6B35), // Orange
-                          Color(0xFFFF8A65), // Light Orange
-                          Color(0xFFFF5252), // Red-Orange
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shadowColor: Colors.transparent,
-                        backgroundColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                        isLoading ? null : registerworkout();
-                      },
-                      child: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                              "Save Data",
-                              style: TextStyle(
-                                // fontFamily: "Poppins",
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                    ),
-                  ),
+                Text(
+                  isChecked ? "Keep Your Spirit" : "Are You Sure?",
+                  style: const TextStyle(fontSize: 18),
                 ),
               ],
             ),
-          ),
+            const SizedBox(height: 20),
+
+            // Tombol Save
+            SizedBox(
+              width: double.infinity,
+              height: 55,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : registerworkout,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 3, 75, 134),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                ),
+                child: isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                        "Save Data",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+              ),
+            ),
+          ],
         ),
       ),
     );

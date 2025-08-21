@@ -9,35 +9,47 @@ import 'package:workout_tracker/views/Beranda/bottom_navbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-  static const id = "/login";
+  static const id = "/login"; // route name untuk halaman login
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // Controller untuk input username dan password
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool isVisibility = false;
-  // bool _obsecurePassword = true;
 
+  // Flag untuk menampilkan atau menyembunyikan password
+  bool isVisibility = false;
+
+  /// Fungsi untuk melakukan proses login
   login() async {
     final username = usernameController.text.trim();
     final password = passwordController.text.trim();
+
+    // Validasi input, jika kosong tampilkan error snackbar
     if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Username and Password cannot be empty")),
       );
       return;
     }
+
+    // Cek ke database apakah user valid
     final userData = await DbHelper.loginUser(username, password);
+
     if (userData != null) {
+      // Simpan data user ke SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('username', userData.username);
-      // await prefs.setString('email', userData.email);
+      // await prefs.setString('email', userData.email); // bisa ditambahkan jika diperlukan
       await PreferenceHandler.saveLogin();
+
+      // Navigasi ke halaman utama (BottomNavbar)
       context.pushReplacementNamed(BottomNavbar.id);
     } else {
+      // Jika username atau password salah
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Incorrect username or password")),
       );
@@ -46,9 +58,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Menggunakan Stack agar bisa menaruh background + layer login
     return Scaffold(body: Stack(children: [buildBackground(), buildLayer()]));
   }
 
+  /// Fungsi helper untuk membuat TextField (username/password)
   TextField buildTextField({
     String? labelText,
     String? hintText,
@@ -57,7 +71,8 @@ class _LoginPageState extends State<LoginPage> {
   }) {
     return TextField(
       controller: controller,
-      obscureText: isPassword ? !isVisibility : false,
+      obscureText:
+          isPassword ? !isVisibility : false, // toggle show/hide password
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
@@ -79,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         suffixIcon: isPassword
             ? IconButton(
+                // Tombol untuk show/hide password
                 onPressed: () {
                   setState(() {
                     isVisibility = !isVisibility;
@@ -93,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Membuat background putih polos
   Container buildBackground() {
     return Container(
       height: double.infinity,
@@ -101,21 +118,27 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /// Helper untuk memberikan jarak vertikal
   SizedBox height(double height) => SizedBox(height: height);
+
+  /// Helper untuk memberikan jarak horizontal
   SizedBox width(double width) => SizedBox(width: width);
 
+  /// Membuat layer utama login form (logo, input, tombol, dll.)
   SafeArea buildLayer() {
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding:
-              const EdgeInsetsGeometry.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Logo / gambar utama
                 Image.asset("assets/images/workout.png",
                     height: 225, width: 225),
+
+                // Teks judul
                 const Text(
                   "Make Your Health",
                   textAlign: TextAlign.center,
@@ -131,40 +154,48 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 3, 75, 134),
                   ),
                 ),
+
                 height(20),
+
+                // Input username
                 buildTextField(
                   controller: usernameController,
                   labelText: "Username",
                   hintText: "Please input your username",
                 ),
+
                 height(10),
+
+                // Input password
                 buildTextField(
                   controller: passwordController,
                   labelText: "Password",
                   hintText: "Please input your password",
                   isPassword: true,
                 ),
+
                 height(10),
+
+                // Tombol login
                 SizedBox(
                   height: 56,
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 245, 102, 7),
+                      backgroundColor: const Color.fromARGB(255, 3, 75, 134),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     onPressed: () {
-                      login();
+                      login(); // panggil fungsi login
                     },
                     child: const Text(
                       "Login",
                       style: TextStyle(
-                        // fontFamily: "Poppins",
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -172,14 +203,19 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+
                 height(8),
+
+                // Tombol lupa password
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        // bisa diarahkan ke halaman reset password
+                      },
                       child: const Text(
-                        "Forgot Password?",
+                        "Forgot Password ?",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -197,3 +233,9 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
+/// note :
+/// login() → validasi input, cek ke database, simpan status login ke SharedPreferences, lalu navigasi ke dashboard.
+// buildTextField() → membuat widget input yang bisa dipakai ulang untuk username & password.
+// buildBackground() → membuat background putih.
+// buildLayer() → menampilkan UI utama (logo, teks, input, tombol login, forgot password).

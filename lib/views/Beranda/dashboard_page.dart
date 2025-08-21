@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:workout_tracker/widgets/categories_page.dart';
 import 'package:workout_tracker/widgets/progress_card.dart';
 
+/// Halaman utama Dashboard setelah login
+/// Menampilkan progress latihan, banner motivasi, dan daftar kategori workout.
+
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
-  static const id = "/dashboard";
+
+  static const id = "/dashboard"; // untuk routing
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -15,22 +19,27 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
+      /// AppBar dengan logo dan tombol notifikasi
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 44, 168, 240),
         title: Image.asset(
           "assets/images/workout.png",
-          // fit: BoxFit.cover,
           height: 75,
           width: 75,
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              // TODO: Arahkan ke halaman notifikasi
+            },
             icon: const Icon(Icons.notifications_active),
             color: Colors.white,
           ),
         ],
       ),
+
+      /// Isi utama halaman
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
         child: SingleChildScrollView(
@@ -38,20 +47,20 @@ class _DashboardPageState extends State<DashboardPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 12),
-              const Column(
-                children: [
-                  Text(
-                    "Progress Training",
-                    style: TextStyle(
-                      // fontFamily: "Poppins",
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+
+              /// Judul Progress Training
+              const Text(
+                "Progress Training",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
+
               const SizedBox(height: 10),
+
+              /// Scroll horizontal berisi Progress Card
               const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -75,7 +84,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 18),
+
+              /// Banner motivasi dengan tombol "Start Exercise"
               Container(
                 width: double.infinity,
                 height: 176,
@@ -94,6 +106,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 child: Stack(
                   children: [
+                    /// Teks motivasi + tombol start
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -104,35 +117,35 @@ class _DashboardPageState extends State<DashboardPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Start Set\nYour Fitness\nGoals",
+                            "Start Set\nYour Workouts\nGoals",
                             style: TextStyle(
                               color: Colors.white,
-                              // fontFamily: "Poppins",
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 12),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 12,
-                                ),
-                                child: Text(
-                                  "Start Exercise",
-                                  style: TextStyle(
-                                    // fontFamily: "Montserrat",
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blueAccent,
-                                  ),
+
+                          /// Tombol Start Exercise
+                          GestureDetector(
+                            onTap: () {
+                              // TODO: Arahkan ke halaman latihan
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 12,
+                              ),
+                              child: const Text(
+                                "Start Exercise",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueAccent,
                                 ),
                               ),
                             ),
@@ -140,6 +153,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         ],
                       ),
                     ),
+
+                    /// Gambar ilustrasi di sisi kanan banner
                     Positioned(
                       right: 0,
                       bottom: 0,
@@ -159,20 +174,24 @@ class _DashboardPageState extends State<DashboardPage> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 16),
+
+              /// Bagian daftar kategori latihan
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     "Categories",
                     style: TextStyle(
-                      // fontFamily: "Poppins",
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      // color: AppColor.text,
                     ),
                   ),
+
                   const SizedBox(height: 16),
+
+                  /// Daftar kategori workout
                   Column(
                     children: [
                       CategoriesPage(
@@ -240,3 +259,8 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 }
+
+/// note:
+/// Progresscard → Menampilkan progress training dalam scroll horizontal.
+/// Container Banner → Gradien dengan teks motivasi + tombol Start Exercise + gambar ilustrasi.
+/// CategoriesPage → List kategori latihan (Full Body, Abs, Plank, dll).
